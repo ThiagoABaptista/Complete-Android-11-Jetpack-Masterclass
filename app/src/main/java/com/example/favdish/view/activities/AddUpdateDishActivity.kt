@@ -1,11 +1,11 @@
-package com.example.favdish
+package com.example.favdish.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
-class SplashActivity : AppCompatActivity() {
+class AddUpdateDishActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(R.layout.activity_add_update_dish)
     }
 }
