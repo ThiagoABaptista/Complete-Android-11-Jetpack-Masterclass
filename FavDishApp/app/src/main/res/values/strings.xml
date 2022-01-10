@@ -5,10 +5,6 @@
     <string name="title_favorite_dishes">Favorite</string>
     <string name="title_random_dish">Random Dish</string>
 
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
-
     <string name="splash_screen_title">Fav Dish</string>
 
     <string name="action_add_dish">Add Dish</string>
@@ -37,5 +33,13 @@
     <string name="err_msg_enter_dish_ingredients">Enter dish ingredients.</string>
     <string name="err_msg_select_dish_cooking_time">Select dish cooking time.</string>
     <string name="err_msg_enter_dish_cooking_instructions">Enter dish cooking instructions.</string>
+
     <string name="label_no_dishes_added_yet">No dishes added yet!!!</string>
+
+    <string name="title_dish_details">Dish Details</string>
+
+    <!-- TODO Step 6: Add the string value to the strings.xml-->
+    <!--START-->
+    <string name="lbl_estimate_cooking_time">The approx time required to cook the dish is %1$s minutes.</string>
+    <!--END-->
 </resources>

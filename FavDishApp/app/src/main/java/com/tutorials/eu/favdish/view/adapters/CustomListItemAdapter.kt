@@ -50,6 +50,9 @@ class CustomListItemAdapter(
         }
     }
 
+    /**
+     * Gets the number of items in the list
+     */
     override fun getItemCount(): Int {
         return listItems.size
     }

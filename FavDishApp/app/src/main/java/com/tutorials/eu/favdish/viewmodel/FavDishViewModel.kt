@@ -6,40 +6,37 @@ import com.tutorials.eu.favdish.model.entities.FavDish
 import kotlinx.coroutines.launch
 
 /**
- * A função do ViewModel é fornecer dados para a UI e sobreviver às mudanças de configuração.
- * Um ViewModel atua como um centro de comunicação entre o Repositório e a UI.
- * Você também pode usar um ViewModel para compartilhar dados entre fragmentos.
- * O ViewModel faz parte da biblioteca do ciclo de vida.
+ * The ViewModel's role is to provide data to the UI and survive configuration changes.
+ * A ViewModel acts as a communication center between the Repository and the UI.
+ * You can also use a ViewModel to share data between fragments.
+ * The ViewModel is part of the lifecycle library.
  *
+ * @param repository - The repository class is
  */
 class FavDishViewModel(private val repository: FavDishRepository) : ViewModel() {
 
     /**
-     * Lançamento de uma nova co-rotina para inserir os dados de forma não bloqueadora.
+     * Launching a new coroutine to insert the data in a non-blocking way.
      */
     fun insert(dish: FavDish) = viewModelScope.launch {
-        //Chama a função do repositorio e passa os detalhes
+        // Call the repository function and pass the details.
         repository.insertFavDishData(dish)
     }
 
-    // TODO Step 3: Get all the dishes list from the database in the ViewModel to pass it to the UI.
-    // START
-    /**
-     * Usar LiveData e armazenar em cache o que allDishes retorna tem vários benefícios:
-     * Podemos colocar um observador nos dados (em vez de pesquisar as alterações) e apenas
-     * atualizar a UI quando os dados realmente mudarem.
-     * O repositório é completamente separado da UI por meio do ViewModel.
-     */
+    /** Using LiveData and caching what allDishes returns has several benefits:
+     * We can put an observer on the data (instead of polling for changes) and only
+     * update the UI when the data actually changes.
+     * Repository is completely separated from the UI through the ViewModel.
+    */
     val allDishesList: LiveData<List<FavDish>> = repository.allDishesList.asLiveData()
-    // END
 }
 
 /**
- * Para criar o ViewModel, implementamos um ViewModelProvider.Factory que obtém como parâmetro as dependências
- * necessárioas para criar FavDishViewModel: o FavDishRepository.
- * Ao usar viewModels e ViewModelProvider.Factory, a estrutura cuidará do lifecycle do ViewModel.
- * Ele sobreviverá às mudanças de configuração e mesmo se a atividade for recriada,
- * você sempre obterá a instância correta da classe FavDishViewModel.
+ * To create the ViewModel we implement a ViewModelProvider.Factory that gets as a parameter the dependencies
+ * needed to create FavDishViewModel: the FavDishRepository.
+ * By using viewModels and ViewModelProvider.Factory then the framework will take care of the lifecycle of the ViewModel.
+ * It will survive configuration changes and even if the Activity is recreated,
+ * you'll always get the right instance of the FavDishViewModel class.
  */
 class FavDishViewModelFactory(private val repository: FavDishRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

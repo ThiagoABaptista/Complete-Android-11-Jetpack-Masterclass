@@ -54,6 +54,7 @@ import java.io.IOException
 import java.io.OutputStream
 import java.util.*
 
+
 class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var mBinding: ActivityAddUpdateDishBinding
@@ -63,6 +64,7 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
     // A global variable for the custom list dialog.
     private lateinit var mCustomListDialog: Dialog
+
 
     private val mFavDishViewModel: FavDishViewModel by viewModels {
         FavDishViewModelFactory((application as FavDishApplication).repository)
@@ -396,7 +398,6 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         dialog.show()
     }
 
-
     private fun showRationalDialogForPermissions() {
         AlertDialog.Builder(this)
             .setMessage("It Looks like you have turned off permissions required for this feature. It can be enabled under Application Settings")
@@ -417,7 +418,6 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
             }.show()
     }
 
-
     private fun saveImageToInternalStorage(bitmap: Bitmap): String {
 
         // Get the context wrapper instance
@@ -425,7 +425,6 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
         // Initializing a new file
         // The bellow line return a directory in internal storage
-
         var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
 
         // Mention a file name to save the image
@@ -450,7 +449,6 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         // Return the saved image absolute path
         return file.absolutePath
     }
-
 
     private fun customItemsListDialog(title: String, itemsList: List<String>, selection: String) {
         mCustomListDialog = Dialog(this@AddUpdateDishActivity)

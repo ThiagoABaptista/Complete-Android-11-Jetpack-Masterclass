@@ -24,10 +24,7 @@ interface FavDishDao {
     @Insert
     suspend fun insertFavDishDetails(favDish: FavDish)
 
-    // TODO Step 1: Create a function to get the list of dishes from database using @Query.
-    // START
     /**
-     *
      * Quando os dados são alterados, geralmente você deseja realizar alguma ação, como exibir os dados atualizados na UI.
      * Isso significa que você deve observar os dados para que, quando eles mudem, você possa reagir.
      *
@@ -42,5 +39,4 @@ interface FavDishDao {
      */
     @Query("SELECT * FROM FAV_DISHES_TABLE ORDER BY ID")
     fun getAllDishesList(): Flow<List<FavDish>>
-    // END
 }

@@ -10,6 +10,10 @@ import com.tutorials.eu.favdish.model.database.FavDishRoomDatabase
 class FavDishApplication : Application() {
 
     /**
+     * Usando by lazy para que o database e o repositório seja criado apenas quando necessário
+     * em vez quando a aplicação inicia.
+     */
+    /**
      *
      * A palavra-chave "lazy" usada para criar a nova instância que usa a função de inicialização especificada
      * e o modo thread-safety padrão [LazyThreadSafetyMode.SYNCHRONIZED].
@@ -25,6 +29,6 @@ class FavDishApplication : Application() {
      * Usando by lazy para que o banco de dados e o repositório sejam criados apenas quando forem necessários
      * em vez de quando o aplicativo é iniciado.
      */
-    // A variable for repository.
+    // A variable para o repository.
     val repository by lazy { FavDishRepository(database.favDishDao()) }
 }
