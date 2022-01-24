@@ -2,12 +2,16 @@ package com.tutorials.eu.favdish.view.fragments
 
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.renderscript.ScriptGroup
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.Glide
@@ -16,16 +20,20 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.tutorials.eu.favdish.R
+import com.tutorials.eu.favdish.application.FavDishApplication
 import com.tutorials.eu.favdish.databinding.FragmentDishDetailsBinding
+import com.tutorials.eu.favdish.viewmodel.FavDishViewModel
+import com.tutorials.eu.favdish.viewmodel.FavDishViewModelFactory
 import java.io.IOException
 import java.util.*
 
 class DishDetailsFragment : Fragment() {
 
-    // TODO Step 7: Create a ViewBinding variable.
-    // START
     private var mBinding: FragmentDishDetailsBinding? = null
-    // END
+
+    private val mFavDishViewModel: FavDishViewModel by viewModels{
+        FavDishViewModelFactory(((requireActivity().application)as FavDishApplication).repository)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,8 +55,6 @@ class DishDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val args: DishDetailsFragmentArgs by navArgs()
-        // TODO Step 10: Remove the log and populate the data to UI.
-        // START
         args.let {
             try {
                 // Load the dish image in the ImageView.
@@ -99,8 +105,50 @@ class DishDetailsFragment : Fragment() {
             mBinding!!.tvCookingDirection.text = it.dishDetails.directionToCook
             mBinding!!.tvCookingTime.text =
                 resources.getString(R.string.lbl_estimate_cooking_time, it.dishDetails.cookingTime)
+
+            if(args.dishDetails.favoriteDish){
+                mBinding!!.ivFavoriteDish.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_selected
+                ))
+            }else{
+
+                mBinding!!.ivFavoriteDish.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_unselected
+                ))
+            }
         }
-        // END
+
+        mBinding!!.ivFavoriteDish.setOnClickListener{
+            args.dishDetails.favoriteDish = !args.dishDetails.favoriteDish
+
+            mFavDishViewModel.update(args.dishDetails)
+
+            if(args.dishDetails.favoriteDish){
+                mBinding!!.ivFavoriteDish.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_selected
+                ))
+                Toast.makeText(
+                    requireActivity(),
+                    resources.getString(R.string.msg_added_to_favorites),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }else{
+
+                mBinding!!.ivFavoriteDish.setImageDrawable(ContextCompat.getDrawable(
+                    requireActivity(),
+                    R.drawable.ic_favorite_unselected
+                ))
+                Toast.makeText(
+                    requireActivity(),
+                    resources.getString(R.string.msg_removed_from_favorites),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     }
 
     // TODO Step 9: Override the onDestroy function to make the mBinding null that is avoid the memory leaks. This we have not done before because the AllDishesFragment because when in it the onDestroy function is called the app is killed. But this is the good practice to do it.

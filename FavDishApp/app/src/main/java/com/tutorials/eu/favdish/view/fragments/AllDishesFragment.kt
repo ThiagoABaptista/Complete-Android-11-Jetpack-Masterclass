@@ -47,7 +47,6 @@ class AllDishesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         mBinding.rvDishesList.layoutManager = GridLayoutManager(requireActivity(), 2)
         val favDishAdapter = FavDishAdapter(this@AllDishesFragment)
         mBinding.rvDishesList.adapter = favDishAdapter
@@ -57,7 +56,8 @@ class AllDishesFragment : Fragment() {
          * O método onChanged() é acionado quando os dados
          * observados são alterados e a atividade está em primeiro plano.
          */
-        mFavDishViewModel.allDishesList.observe(viewLifecycleOwner) { dishes ->
+        mFavDishViewModel.allDishesList.observe(viewLifecycleOwner) {
+                dishes ->
             dishes.let {
 
                 if (it.isNotEmpty()) {

@@ -29,4 +29,12 @@ class FavDishRepository(private val favDishDao: FavDishDao) {
     // Room executes all queries on a separate thread.
     // Observed Flow will notify the observer when the data has changed.
     val allDishesList: Flow<List<FavDish>> = favDishDao.getAllDishesList()
+
+    @WorkerThread
+    suspend fun updateFavDishData(favDish: FavDish){
+        favDishDao.updateFavDishDetails(favDish)
+    }
+
+
+    val favoriteDishes : Flow<List<FavDish>> = favDishDao.getFavoritesDishesList()
 }
