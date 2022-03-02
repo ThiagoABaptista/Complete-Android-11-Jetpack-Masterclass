@@ -46,6 +46,8 @@ import com.tutorials.eu.favdish.databinding.DialogCustomListBinding
 import com.tutorials.eu.favdish.model.entities.FavDish
 import com.tutorials.eu.favdish.utils.Constants
 import com.tutorials.eu.favdish.view.adapters.CustomListItemAdapter
+import com.tutorials.eu.favdish.view.fragments.AllDishesFragmentDirections
+import com.tutorials.eu.favdish.view.fragments.DishDetailsFragment
 import com.tutorials.eu.favdish.viewmodel.FavDishViewModel
 import com.tutorials.eu.favdish.viewmodel.FavDishViewModelFactory
 import java.io.File
@@ -65,6 +67,7 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
     // A global variable for the custom list dialog.
     private lateinit var mCustomListDialog: Dialog
 
+    private var mFavDishDetails: FavDish? = null
 
     private val mFavDishViewModel: FavDishViewModel by viewModels {
         FavDishViewModelFactory((application as FavDishApplication).repository)
@@ -76,7 +79,29 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         mBinding = ActivityAddUpdateDishBinding.inflate(layoutInflater)
         setContentView(mBinding.root)
 
+        if(intent.hasExtra(Constants.EXTRA_DISH_DETAILS)){
+            mFavDishDetails = intent.getParcelableExtra(Constants.EXTRA_DISH_DETAILS)
+        }
+
         setupActionBar()
+
+        mFavDishDetails?.let {
+            if(it.id != 0){
+                mImagePath = it.image
+                Glide.with(this@AddUpdateDishActivity)
+                    .load(mImagePath)
+                    .centerCrop()
+                    .into(mBinding.ivDishImage)
+                mBinding.etTitle.setText(it.title)
+                mBinding.etType.setText(it.type)
+                mBinding.etCategory.setText(it.category)
+                mBinding.etIngredients.setText(it.ingredients)
+                mBinding.etCookingTime.setText(it.cookingTime)
+                mBinding.etDirectionToCook.setText(it.directionToCook)
+
+                mBinding.btnAddDish.text = resources.getString(R.string.lbl_update_dish)
+            }
+        }
 
         mBinding.ivAddDishImage.setOnClickListener(this@AddUpdateDishActivity)
 
@@ -192,30 +217,50 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
                         ).show()
                     }
                     else -> {
+                        var dishId = 0
+                        var imageSource = Constants.DISH_IMAGE_SOURCE_LOCAL
+                        var favoriteDish = false
+
+                        mFavDishDetails?.let {
+                            if(it.id != 0){
+                                dishId = it.id
+                                imageSource = it.imageSource
+                                favoriteDish = it.favoriteDish
+                            }
+                        }
 
                         val favDishDetails: FavDish = FavDish(
                             mImagePath,
-                            Constants.DISH_IMAGE_SOURCE_LOCAL,
+                            imageSource,
                             title,
                             type,
                             category,
                             ingredients,
                             cookingTimeInMinutes,
                             cookingDirection,
-                            false
+                            favoriteDish,
+                            dishId
                         )
 
-                        mFavDishViewModel.insert(favDishDetails)
+                        if(dishId == 0){
+                            mFavDishViewModel.insert(favDishDetails)
+                           //mFavDishViewModel.insert(favDishDetails)
 
-                        Toast.makeText(
-                            this@AddUpdateDishActivity,
-                            "You successfully added your favorite dish details.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        // You even print the log if Toast is not displayed on emulator
-                        Log.e("Insertion", "Success")
-                        // Finish the Activity
+                            Toast.makeText(
+                                this@AddUpdateDishActivity,
+                                "You successfully added your favorite dish details.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e("Insertion", "Success")
+                        }else{
+                            mFavDishViewModel.update(favDishDetails)
+                            Toast.makeText(
+                                this@AddUpdateDishActivity,
+                                "You successfully updated your favorite dish details.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e("Updating", "Success")
+                        }
                         finish()
                     }
                 }
@@ -305,6 +350,15 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun setupActionBar() {
         setSupportActionBar(mBinding.toolbarAddDishActivity)
+        if(mFavDishDetails != null && mFavDishDetails!!.id != 0){
+            supportActionBar?.let {
+                it.title = resources.getString(R.string.title_edit_dish)
+            }
+        }else {
+            supportActionBar?.let {
+                it.title = resources.getString(R.string.title_add_dish)
+            }
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back)
@@ -464,7 +518,7 @@ class AddUpdateDishActivity : AppCompatActivity(), View.OnClickListener {
         // Set the LayoutManager that this RecyclerView will use.
         binding.rvList.layoutManager = LinearLayoutManager(this@AddUpdateDishActivity)
         // Adapter class is initialized and list is passed in the param.
-        val adapter = CustomListItemAdapter(this@AddUpdateDishActivity, itemsList, selection)
+        val adapter = CustomListItemAdapter(this@AddUpdateDishActivity, null, itemsList, selection)
         // adapter instance is set to the recyclerview to inflate the items.
         binding.rvList.adapter = adapter
         //Start the dialog and display it on screen.

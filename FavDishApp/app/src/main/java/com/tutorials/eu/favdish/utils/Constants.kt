@@ -12,6 +12,11 @@ object Constants {
     const val DISH_IMAGE_SOURCE_LOCAL: String = "Local"
     const val DISH_IMAGE_SOURCE_ONLINE: String = "Online"
 
+    const val ALL_ITENS: String = "All"
+    const val FILTER_SELECTION:String = "FilterSelection"
+
+    const val EXTRA_DISH_DETAILS: String = "DishDetails"
+
     /**
      * This function will return the Dish Type List items.
      * Esta função retornará os itens da Lista de Dish Type.
