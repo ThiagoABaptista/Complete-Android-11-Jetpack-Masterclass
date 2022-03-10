@@ -1,6 +1,7 @@
 package com.tutorials.eu.favdish.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.tutorials.eu.favdish.model.entities.RandomDish
 import com.tutorials.eu.favdish.model.network.RandomDishApiService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -8,7 +9,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.observers.DisposableSingleObserver
 import io.reactivex.rxjava3.schedulers.Schedulers
 
-class RandomDishViewModel {
+class RandomDishViewModel : ViewModel() {
 
     private val randomRecipeApiService = RandomDishApiService()
 
