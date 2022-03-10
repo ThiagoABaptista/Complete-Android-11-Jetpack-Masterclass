@@ -57,4 +57,6 @@
     <string name="msg_removed_from_favorites">You have removed the dish from your favorites</string>
 
     <string name="lbl_estimate_cooking_time">The approx time required to cook the dish is %1$s minutes.</string>
+    <string name="msg_already_added_to_favorites">You have already added the dish to your favorites.</string>
+    <string name="please_wait">Please Wait!</string>
 </resources>
