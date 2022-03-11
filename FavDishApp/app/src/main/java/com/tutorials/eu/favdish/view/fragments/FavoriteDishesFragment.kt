@@ -58,11 +58,8 @@ class FavoriteDishesFragment : Fragment() {
                 if(it.isNotEmpty()){
                         mBinding!!.rvFavoriteDishesList.visibility = View.VISIBLE
                         mBinding!!.tvNoFavoriteDishesAddedYet.visibility = View.GONE
-
                         adapter.dishesList(it)
-
                 }else{
-
                     mBinding!!.rvFavoriteDishesList.visibility = View.GONE
                     mBinding!!.tvNoFavoriteDishesAddedYet.visibility = View.VISIBLE
                 }
