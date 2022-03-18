@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
                 "FavDish Notify Work",
                 ExistingPeriodicWorkPolicy.KEEP,
                 createWorkRequest()
-            )
+             )
     }
 
     override fun onSupportNavigateUp(): Boolean {
