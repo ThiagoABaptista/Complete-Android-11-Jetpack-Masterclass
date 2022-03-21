@@ -25,6 +25,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val btnInboxStyleNotification = findViewById<Button>(R.id.btn_inbox_styles)
         btnInboxStyleNotification.setOnClickListener(this@MainActivity)
+
+        val btnBigImageStyleNotification = findViewById<Button>(R.id.btn_big_image_style)
+        btnBigImageStyleNotification.setOnClickListener(this@MainActivity)
     }
 
     override fun onClick(v: View) {
@@ -33,8 +36,72 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 generateInboxStyleNotification()
                 return
             }
+            R.id.btn_big_image_style -> {
+                generateBigPictureStyleNotification()
+                return
+            }
         }
     }
+
+    private fun generateBigPictureStyleNotification(){
+        val notificationChannelId: String =
+            NotificationUtil().createBigPictureStyleNotificationChannel(this@MainActivity)
+
+        val bigPictureStyle =
+            NotificationCompat.BigPictureStyle()
+                .bigPicture(
+                    BitmapFactory.decodeResource(
+                        resources,
+                        BigPictureStyleMockData.mBigImage
+                    )
+                )
+                .setBigContentTitle(BigPictureStyleMockData.mBigContentTitle)
+                .setSummaryText(BigPictureStyleMockData.mSummaryText)
+        val mainIntent = Intent(this,MainActivity::class.java)
+        val mainPendingIntent = PendingIntent.getActivity(
+            this,
+            0,
+            mainIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val notificationCompatBuilder = NotificationCompat.Builder(
+            applicationContext,
+            notificationChannelId
+        )
+
+        notificationCompatBuilder
+            .setStyle(bigPictureStyle)
+            .setContentTitle(BigPictureStyleMockData.mContentTitle)
+            .setContentText(BigPictureStyleMockData.mContentText)
+            .setSmallIcon(R.drawable.ic_stat_notification)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    resources,
+                    R.drawable.ic_person
+                )
+            )
+            .setContentIntent(mainPendingIntent)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.purple_500
+                )
+            )
+            .setSubText(1.toString())
+            .setCategory(Notification.CATEGORY_SOCIAL)
+            .setPriority(BigPictureStyleMockData.mPriority)
+            .setVisibility(BigPictureStyleMockData.mChannelLockscreenVisibility)
+        for (name in BigPictureStyleMockData.mParticipants()){
+            notificationCompatBuilder.addPerson(name)
+        }
+
+        val notification = notificationCompatBuilder.build()
+
+        mNotificationManagerCompat.notify(NOTICATION_ID,notification)
+    }
+
     private fun generateInboxStyleNotification(){
 
         val notificationChannelId: String =
